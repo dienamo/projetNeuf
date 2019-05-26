@@ -47,7 +47,7 @@ dossier_config_wp = "/var/www/html/"
 
 utilisateur_mysql = "adminsys"
 
-mdp_sql = "Moudies7"
+mdp_sql = "******"
 
 nom_db_sql = "wordpress"
 
@@ -55,7 +55,7 @@ ip_serveur = "192.168.0.254"
 
 id_serveur = "adminsys"
 
-mdp_serveur = "Moudies7"
+mdp_serveur = "******"
 
 ftp_serveur = "/home/adminsys/ftp/"
 
