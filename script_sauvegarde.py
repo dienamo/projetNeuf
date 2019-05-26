@@ -66,16 +66,20 @@ def sauvegarde_wordpress():
 	if os.path.exists(dossier_sauvegarde_wp) and os.path.exists(dossier_config_wp):
 		# tar du dossier de configuration dans le dossier de sauvegarde wordpress
 		os.system("tar zcvf " + dossier_sauvegarde_wp + "wordpress.tar.gz " + dossier_config_wp)
+		print("************************************************************************")
 		print("[SUCCES] Configuration de wordpress sauvegardée avec succes: " + date)
+		print("************************************************************************")
 		# renseignement de l'operation dans un fichier de logs
 		l = open("logs_sauvegarde.txt","a")
-                l.write("[SUCCES] configuration de wordpress sauvegardée avec succes: " + date)
+                l.write("[SUCCES] configuration de wordpress sauvegardée avec succes: " + date + "\n")
                 l.close()
 	# levee d'une erreur en cas d'abscence d'un ou des dossiers
 	else:
+		print("**************************************************************************************")
 		print("[ERROR] Dossier de sauvegarde et/ou de configuration Wordpress introuvable: " + date)
+		print("**************************************************************************************")
 		l = open("logs_sauvegarde.txt","a")
-                l.write("[ERROR] echec de la sauvegarde configuration wordpress: " + date)
+                l.write("[ERROR] echec de la sauvegarde configuration wordpress: " + date + "\n")
                 l.close()
 		# sortie du programme
 		sys.exit(1)
@@ -86,18 +90,22 @@ def sauvegarde_sql():
 	if os.path.exists(dossier_sauvegarde_mysql):
 		# dump de la base de donnees
 		os.system("mysqldump -u "+utilisateur_mysql+" -p"+mdp_sql+ nom_db_sql+" > "+dossier_sauvegarde_mysql+nom_db_sql+".sql")
-		print("[SUCCES] Base de donnees wordpress sauvegardée avec succes: "+date)
+		print("*****************************************************************")
+		print("[SUCCES] Base de donnees wordpress sauvegardée avec succes: "+ date)
+		print("*****************************************************************")
 		# renseignement de l'operation dans un fichier de logs
 		l = open("logs_sauvegarde.txt","a")
-                l.write("[SUCCES] base de données sauvegardée avec succes: "+date)
+                l.write("[SUCCES] base de données sauvegardée avec succes: " + date + "\n")
                 l.close()
 
 	# levee d'une erreur en cas d'abscence d'un dossier
 	else:
-		print("[ERROR] Dossier de sauvegarde de la base de données introuvable: "+date)
+		print("************************************************************************")
+		print("[ERROR] Dossier de sauvegarde de la base de données introuvable: " + date)
+		print("************************************************************************")
 		# renseignement de l'operation dans un fichier de logs
 		l = open("logs_sauvegarde.txt","a")
-                l.write("[ERROR] dossier de sauvegarde de la base de données introuvable: "+date)
+                l.write("[ERROR] dossier de sauvegarde de la base de données introuvable: " + date + "\n")
                 l.close()
 		# sortie du programme
 		sys.exit(1)
@@ -108,24 +116,32 @@ def transfert_sftp():
 	try:
 		# connexion au serveur
 		with pysftp.Connection(host = ip_serveur, username = id_serveur, password = mdp_serveur, cnopts=cnopts) as sftp:
+			print("***************************************************")
 			print("Connexion au serveur distant établie avec succès...")
+			print("***************************************************")
+			print("Transfert en cours...")
+			print("*********************")
 			localFilePath = dossier_sauvegarde
 			remoteFilePath = ftp_serveur
 			# transfere du dossier de sauvegarde vers le serveur ftp
 			sftp.put_r(localFilePath, remoteFilePath)
+			print("****************************************************************************************")
 			print("[SUCCES] Configuration de wordpress transferée sur le serveur distant avec succes: "+date)
+			print("****************************************************************************************")
 			# renseignement de l'operation dans un fichier de logs
 			l = open("logs_sauvegarde.txt","a")
-			l.write("[SUCCES] configuration de wordpress transferée sur le serveur distant: "+date)
+			l.write("[SUCCES] configuration de wordpress transferée sur le serveur distant: " + date + "\n")
 			l.close()
 			# sortie du programme
 			sys.exit(0)
 	# levee d'une exception en cas de probleme de connexion au serveur
 	except paramiko.SSHException:
-		print("Echec de connexion avec le serveur distant")
+		print("*******************************************")
+		print("Echec de connexion avec le serveur distant.")
+		print("*******************************************")
 		# renseignement de l'operation dans un fichier de logs
 		l = open("logs_sauvegarde.txt","a")
-		l.write("[ERROR] echec de la connexion avec le serveur distant: "+date)
+		l.write("[ERROR] echec de la connexion avec le serveur distant: " + date + "\n")
 		l.close()
 		# sortie du programme
 		sys.exit(1)
@@ -133,3 +149,7 @@ def transfert_sftp():
 
 
 sauvegarde_wordpress()
+
+sauvegarde_sql()
+
+transfert_sftp()
