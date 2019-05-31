@@ -33,6 +33,10 @@ cnopts = pysftp.CnOpts()
 
 cnopts.hostkeys = None
 
+semaine = date.today().isocalendar()[1]
+
+semaine = str(semaine)
+
 date = datetime.now()
 
 date = str(date)
@@ -65,7 +69,7 @@ def sauvegarde_wordpress():
 	# verification de l'existance des dossiers
 	if os.path.exists(dossier_sauvegarde_wp) and os.path.exists(dossier_config_wp):
 		# tar du dossier de configuration dans le dossier de sauvegarde wordpress
-		os.system("tar zcvf " + dossier_sauvegarde_wp + "wordpress.tar.gz " + dossier_config_wp)
+		os.system("tar zcvf " + dossier_sauvegarde_wp + "wordpressSemaine" + semaine + ".tar.gz " + dossier_config_wp)
 		print("************************************************************************")
 		print("[SUCCES] Configuration de wordpress sauvegardée avec succes: " + date)
 		print("************************************************************************")
@@ -89,7 +93,7 @@ def sauvegarde_sql():
 	# verification de l'existance du dossier de savegarde mysql
 	if os.path.exists(dossier_sauvegarde_mysql):
 		# dump de la base de donnees
-		os.system("mysqldump -u "+utilisateur_mysql+" -p"+mdp_sql+ nom_db_sql+" > "+dossier_sauvegarde_mysql+nom_db_sql+".sql")
+		os.system("mysqldump -u "+utilisateur_mysql+" -p"+mdp_sql+ nom_db_sql+" > "+dossier_sauvegarde_mysql+nom_db_sql+ semaine +".sql")
 		print("*****************************************************************")
 		print("[SUCCES] Base de donnees wordpress sauvegardée avec succes: "+ date)
 		print("*****************************************************************")
